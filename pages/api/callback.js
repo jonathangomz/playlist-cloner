@@ -24,7 +24,7 @@ export default async (req, res) => {
   res.setHeader('Set-Cookie', cookie.serialize('token', JSON.stringify(token), {
     httpOnly: true,
     secure: process.env.NODE_END === 'production',
-    maxAge: 3600,
+    maxAge: token.expires_in,
     sameSite: 'strict',
     path: '/',
   }));
