@@ -3,21 +3,27 @@ import { useRouter } from 'next/router'
 import styles from '../styles/Home.module.css'
 import cloner from '../styles/Cloner.module.css'
 import cookie from 'cookie'
+import { useEffect, useState } from 'react'
 
 export default function Cloner({ token }) {
-  const router = useRouter();
+  const [playlist, setPlaylist] = useState(undefined);
+  const [playlistIdInput, setPlaylistIdInput] = useState('');
+  const [playlistId, setPlaylistId] = useState('');
 
-  function logout() {
-    fetch('/api/logout', {
-      method: 'POST'
-    }).then(() => {
-      router.replace('/');
-    });
-  }
+  useEffect(() => {
+    if(playlistId) {
+      fetch(`/api/playlists/${playlistId}`, {
+        headers: {
+          Authorization: `${token.token_type} ${token.access_token}`,
+          'Content-Type': 'application/json',
+        }
+      })
+      .then((res) => res.json())
+      .then((data) => setPlaylist(data));
+    }
+  }, [playlistId]);
 
-  function test() {
-    console.log(token);
-  }
+  console.log(playlist);
 
   return (
     <div className={styles.container}>
@@ -27,13 +33,16 @@ export default function Cloner({ token }) {
       </Head>
 
       <main className={styles.main}>
+        <a href="/api/logout" className={cloner.logout_button}>Logout</a>
+
         <h1 className={styles.title}>
           Playlist cloner
         </h1>
 
-        <input className={cloner.search_bar} type="text" placeholder="playlist_id"/>
-        <button className={cloner.search_button} onClick={test}>Search</button>
-        <a href="/api/logout" className={cloner.logout_button}>Logout</a>
+        <input className={cloner.search_bar} type="text" placeholder="playlist_id" onChange={(e) => setPlaylistIdInput(e.target.value)}/>
+        <button className={cloner.search_button} onClick={() => setPlaylistId(playlistIdInput)}>Search</button>
+        
+        {playlist && (<img src={playlist.images[1].url} alt="Playlist mosaic" width={playlist.images[1].width}/>)}
       </main>
 
       <footer className={styles.footer}>
