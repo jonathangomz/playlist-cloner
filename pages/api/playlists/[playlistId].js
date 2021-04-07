@@ -8,7 +8,7 @@ export default async (req, res) => {
     error = err;
   }
 
-  if(error) res.statusCode = 500;
+  if(error) res.statusCode = 404;
 
   res.json(response?.data || error);
 }
