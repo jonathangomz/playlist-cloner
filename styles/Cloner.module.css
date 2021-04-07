@@ -1,0 +1,63 @@
+.search_bar {
+  width: 100%;
+  font-size: 18px;
+  margin: 12px;
+  border-radius: 5px;
+  border: 1px solid black;
+  padding: 12px;
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+    Bitstream Vera Sans Mono, Courier New, monospace;
+}
+
+.search_bar::placeholder {
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+    Bitstream Vera Sans Mono, Courier New, monospace;
+}
+
+.search_button {
+  height: 32px;
+  width: 50%;
+  transition: all 0.5s;
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+  Bitstream Vera Sans Mono, Courier New, monospace;
+  border-radius: 5px;
+  background-color: transparent;
+  border: 1px solid #37B954;
+  color: #2e9b45
+}
+
+.search_button:hover {
+  background-color: #37B954;
+  color: white;
+}
+
+.search_button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.logout_button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: auto;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px;
+  color: #37B954;
+  background-color: black;
+  border: 2px solid #37B954;
+  margin: 12px;
+  transition: all 0.5s;
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+  Bitstream Vera Sans Mono, Courier New, monospace;
+  border-radius: 5px;
+}
+
+.logout_button:hover {
+  color: black;
+  background-color: #37B954;
+  border: 2px solid black;
+}
