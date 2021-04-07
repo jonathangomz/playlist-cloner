@@ -50,10 +50,14 @@ export default function Cloner({ token }) {
   );
 }
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, res }) {
   const cookies = cookie.parse(req ? req.headers.cookie || '' : document.cookie);
 
-  console.log(cookies);
+  if (!cookies.token) {
+    res.statusCode = 302;
+    res.setHeader('Location', '/');
+    res.end();
+  }
 
   return {
     props: {
