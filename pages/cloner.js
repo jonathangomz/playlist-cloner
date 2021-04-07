@@ -65,7 +65,7 @@ export default function Cloner({ token }) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Logged!</title>
+        <title>Playlist Cloner</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
