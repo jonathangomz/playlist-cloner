@@ -1,0 +1,7 @@
+.modal {
+  position: absolute;
+}
+
+.modal p {
+  color: red;
+}
