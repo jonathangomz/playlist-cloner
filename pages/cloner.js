@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import cloner from '../styles/Cloner.module.css'
-import error from '../styles/Cloner.module.css'
+import error from '../styles/Error.module.css'
 import cookie from 'cookie'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Cloner({ token }) {
   const [searchResults, setSearchResults] = useState(undefined);
@@ -102,8 +102,16 @@ export default function Cloner({ token }) {
 }
 
 function Error({ status }) {
+  let [displayClass, setDisplayClass] = useState('');
+
+  useEffect(() => {
+    const wait = 500;
+    setTimeout(() => setDisplayClass(error.show), wait);
+    setTimeout(() => setDisplayClass(error.hide), wait * 8);
+  }, []);
+
   return (
-    <div className={error.modal}>
+    <div className={`${error.modal} ${displayClass}`}>
       {status === 404 && <p> Any playlist found with that Id </p>}
       {status === 500 && <p> An error ocurrer </p>}
     </div>
