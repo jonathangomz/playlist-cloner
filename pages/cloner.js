@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import cloner from '../styles/Cloner.module.css'
+import playlist from '../styles/Playlist.module.css'
 import error from '../styles/Error.module.css'
 import cookie from 'cookie'
 import { useEffect, useState } from 'react'
@@ -82,19 +83,32 @@ export default function Cloner({ token }) {
           <button className={cloner.search_button} onClick={searchById}>Search by id</button>
         </div>
         
-        {playlist && <Playlist images={playlist.images}/>}
+        {playlist &&
+          <Playlist
+            id={playlist.id}
+            name={playlist.name}
+            description={playlist.description}
+            owner={playlist.owner}
+            tracks={playlist.tracks}
+            href={playlist.external_urls.spotify}
+            uri={playlist.uri}
+            images={playlist.images}
+            onDismiss={() => setPlaylist(undefined)}
+            getToken={() => token}
+          />
+        }
 
         {error && <Error status={error.status} />}
       </main>
 
       <footer className={styles.footer}>
+
         <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+          href="https://jonathangomz/codes"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
+          Made by <span style={{ fontWeight: 700, padding: '5px' }}>@jonathangomz</span>
         </a>
       </footer>
     </div>
@@ -118,12 +132,53 @@ function Error({ status }) {
   )
 }
 
-function Playlist({ images }) {
-  return (
-    <div>
-      {(Array.isArray(images) && images.length > 0) &&
-        (<img src={images[0].url} alt="Playlist image" width={300}/>)
+function Playlist({ id, name, description, owner, uri, href, tracks, images, onDismiss, getToken }) {
+  let [displayClass, setDisplayClass] = useState('');
+  
+  useEffect(() => {
+    setDisplayClass(playlist.modal_show);
+  }, []);
+
+  const dismiss = (e) => {
+    if(e.target.id === 'modal_fullpage_container') {
+      setDisplayClass(playlist.modal_hide);
+      setTimeout(() => onDismiss(), 1000);
+    }
+  }
+
+  const clone = () => {
+    fetch(`/api/clone/${id}`, {
+      headers: {
+        Authorization: `${getToken().token_type} ${getToken().token}`
       }
+    })
+  }
+
+  return (
+    <div className={`${playlist.modal} ${displayClass}`} id="modal_fullpage_container" onClick={dismiss}>
+      <div className={playlist.modal_content}>
+        {(Array.isArray(images) && images.length > 0) &&
+          (<img className={playlist.image} src={images[0].url} alt="Playlist image" width={300}/>)
+        }
+        <a className={playlist.clone_button} onClick={clone}>Make it yours</a>
+        <h3 style={{ marginBottom: 0 }}>{ name }</h3>
+        <p style={{ marginBottom: '12px', fontSize: '14px', textAlign: 'justify', fontStyle: 'italic' }}>{ description }</p>
+        <div className={playlist.playlist_field}>
+          <p>Author:</p>
+          <p>{ owner.display_name }</p>
+        </div>
+        <div className={playlist.playlist_field}>
+          <p>Num. tracks:</p>
+          <p>{ tracks.total }</p>
+        </div>
+        <div className={playlist.buttons_container}>
+          <span style={{ fontWeight: 700 }}>Open</span>
+          <div className={playlist.buttons_list}>
+            <a className={playlist.button} href={`https://open.spotify.com/go?uri=${uri}&rtd=1`} target="_blank">App</a>
+            <a className={playlist.button} href={href} target="_blank">Browser</a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
