@@ -11,17 +11,21 @@ export default function Cloner({ token }) {
   const [playlist, setPlaylist] = useState(undefined);
   const [searchText, setSearchText] = useState('');
   const [error, setError] = useState(undefined);
+  const [loading, setLoading] = useState(false);
 
   function resetSearchState() {
-    setError(undefined);
-    setPlaylist(undefined);
     setSearchResults(undefined);
+    setPlaylist(undefined);
+    setError(undefined);
+    setLoading(false);
   }
 
   function search() {
     resetSearchState();
 
     if(searchText) {
+      setLoading(true);
+
       fetch('/api/search', {
         method: 'POST',
         body: JSON.stringify({ search_name: searchText }),
@@ -38,7 +42,8 @@ export default function Cloner({ token }) {
           setSearchResults(data);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
     }
   };
 
@@ -46,6 +51,8 @@ export default function Cloner({ token }) {
     resetSearchState();
 
     if(searchText) {
+      setLoading(true);
+
       fetch(`/api/playlists/${searchText}`, {
         headers: {
           Authorization: `${token.token_type} ${token.access_token}`,
@@ -59,7 +66,8 @@ export default function Cloner({ token }) {
           setPlaylist(data);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
     }
   };
 
@@ -97,6 +105,8 @@ export default function Cloner({ token }) {
             getToken={() => token}
           />
         }
+
+        {loading && <span>Is loading</span>}
 
         {error && <Error status={error.status} />}
       </main>
