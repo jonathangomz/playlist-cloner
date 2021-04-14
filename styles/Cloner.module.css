@@ -17,14 +17,14 @@
 .search_buttons_container {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
   width: 100%;
 }
 
 .search_button {
   height: 32px;
-  width: 50%;
-  transition: all 0.5s;
+  width: 48%;
+  transition-property: background-color, color;
+  transition-duration: 0.5s;
   font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
   Bitstream Vera Sans Mono, Courier New, monospace;
   border-radius: 5px;
@@ -51,13 +51,13 @@
   height: auto;
   text-align: center;
   font-size: 14px;
-  font-weight: 700;
   padding: 12px;
   color: #37B954;
   background-color: black;
-  border: 2px solid #37B954;
+  border: 1px solid #37B954;
   margin: 12px;
-  transition: all 0.5s;
+  transition-property: color, background-color, border;
+  transition-duration: 0.5s;
   font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
   Bitstream Vera Sans Mono, Courier New, monospace;
   border-radius: 5px;
@@ -66,5 +66,5 @@
 .logout_button:hover {
   color: black;
   background-color: #37B954;
-  border: 2px solid black;
+  border: 1px solid black;
 }
