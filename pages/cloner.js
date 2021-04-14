@@ -7,6 +7,7 @@ import { useState } from 'react'
 
 const Error = dynamic(() => import('../components/Error'))
 const Playlist = dynamic(() => import('../components/Playlist'))
+const SearchResult = dynamic(() => import('../components/SearchResult'))
 
 export default function Cloner({ token }) {
   const [searchResults, setSearchResults] = useState(undefined);
@@ -107,6 +108,8 @@ export default function Cloner({ token }) {
             getToken={() => token}
           />
         }
+
+        {searchResults && <SearchResult playlists={searchResults.playlists.items}/>}
 
         {loading && <span>Is loading</span>}
 
