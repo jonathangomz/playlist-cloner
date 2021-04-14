@@ -101,3 +101,15 @@
   width: 100%;
   text-align: center;
 }
+
+.clone_button:hover {
+  cursor: pointer;
+}
+
+.clone_button_disabled {
+  background-color: #a5a5a5;
+  border-radius: 5px;
+  padding: 12px;
+  width: 100%;
+  text-align: center;
+}

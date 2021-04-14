@@ -1,0 +1,17 @@
+.modal {
+  position: absolute;
+  top: -100px;
+  background-color: #37B954;
+  border-radius: 5px;
+  padding: 12px;
+  transition: top 1s;
+  color: white;
+}
+
+.show {
+  top: 15px;
+}
+
+.hide {
+  top: -100px;
+}

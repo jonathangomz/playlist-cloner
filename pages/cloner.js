@@ -3,15 +3,17 @@ import dynamic from 'next/dynamic'
 import styles from '../styles/Home.module.css'
 import cloner from '../styles/Cloner.module.css'
 import cookie from 'cookie'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const Error = dynamic(() => import('../components/Error'))
+const Message = dynamic(() => import('../components/Message'))
 const Playlist = dynamic(() => import('../components/Playlist'))
 const SearchResult = dynamic(() => import('../components/SearchResult'))
 
 export default function Cloner({ token }) {
   const [searchResults, setSearchResults] = useState(undefined);
   const [playlist, setPlaylist] = useState(undefined);
+  const [profile, setProfile] = useState(undefined);
   const [searchText, setSearchText] = useState('');
   const [error, setError] = useState(undefined);
   const [loading, setLoading] = useState(false);
@@ -74,6 +76,23 @@ export default function Cloner({ token }) {
     }
   };
 
+  useEffect(() => {
+    fetch('/api/me', {
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+      }
+    })
+    .then((res) => res.ok ? res.json() : res)
+    .then((data) => {
+      if(data?.status && data?.status !== 200) {
+        setError(data);
+      }else {
+        setProfile(data);
+      }
+    })
+    .catch((err) => console.log(err));
+  }, []);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -82,6 +101,10 @@ export default function Cloner({ token }) {
       </Head>
 
       <main className={styles.main}>
+        {profile && (
+          <Message message={`You are logged in as ${profile.display_name}`} />
+        )}
+
         <a href="/api/logout" className={cloner.logout_button}>Logout</a>
 
         <h1 className={styles.title}>
@@ -94,22 +117,16 @@ export default function Cloner({ token }) {
           <button className={cloner.search_button} onClick={searchById}>Search by id</button>
         </div>
         
-        {playlist &&
+        {(playlist && profile) &&
           <Playlist
-            id={playlist.id}
-            name={playlist.name}
-            description={playlist.description}
-            owner={playlist.owner}
-            tracks={playlist.tracks}
-            href={playlist.external_urls.spotify}
-            uri={playlist.uri}
-            images={playlist.images}
+            info={playlist}
+            userId={profile.id}
             onDismiss={() => setPlaylist(undefined)}
             getToken={() => token}
           />
         }
 
-        {searchResults && <SearchResult playlists={searchResults.playlists.items}/>}
+        {(searchResults && searchResults?.items?.length > 0) && <SearchResult playlists={searchResults.playlists.items}/>}
 
         {loading && <span>Is loading</span>}
 
@@ -117,9 +134,8 @@ export default function Cloner({ token }) {
       </main>
 
       <footer className={styles.footer}>
-
         <a
-          href="https://jonathangomz/codes"
+          href="https://jonathangomz.codes"
           target="_blank"
           rel="noopener noreferrer"
         >

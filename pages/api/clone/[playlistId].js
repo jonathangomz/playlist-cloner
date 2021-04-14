@@ -15,23 +15,29 @@ export default async (req, res) => {
   }
 
   // Create the new playlist
-  const res_new_playlist = await axios.post(`https://api.spotify.com/v1/users/${req.body.userId}/playlists`, {
+  const res_new_playlist = await axios.post(`https://api.spotify.com/v1/users/${req.body.userId}/playlists`, { name: `Copy of ${req.query.playlistId}`}, {
     headers: {
       Authorization: req.headers.authorization
     }
   });
 
-  const new_playlist = res_new_playlist.data;
-  const id = new_playlist.id;
+  const id = res_new_playlist.data.id;
 
   // Add the tracks to the playlist
-  await spotify.playlist.tracks.add(`https://api.spotify.com/v1/playlists/${id}/tracks`, {
-    tracks: tracks_to_be_added,
+  await axios.post(`https://api.spotify.com/v1/playlists/${id}/tracks`, {
+    uris: tracks_to_be_added,
   }, {
     headers: {
       Authorization: req.headers.authorization,
     }
   });
 
-  res.json(new_playlist);
+  // Get the last info of the created playlist
+  const res_playlist = await axios.get(`https://api.spotify.com/v1/playlists/${id}`, {
+    headers: {
+      Authorization: req.headers.authorization
+    }
+  });
+
+  res.json(res_playlist.data);
 }

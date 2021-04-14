@@ -21,13 +21,22 @@
   height: 50px;
   border-top: 1px solid #eaeaea;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.footer img {
-  margin-left: 0.5rem;
+.profile {
+  color:#37B954;
+  border-bottom: 1px solid #eaeaea;
+  width: 100%;
+  text-align: center;
 }
+
+.profile > span {
+  color: black;
+  font-weight: 700;
+} 
 
 .footer a {
   display: flex;
