@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import styles from '../styles/Playlist.module.css'
 
-export default function Playlist({ info, onDismiss, getToken, userId }) {
+export default function Playlist({ info, onDismiss, userId }) {
   let [displayClass, setDisplayClass] = useState('');
   let [playlist, setPlaylist] = useState(info);
   let [loading, setLoading] = useState(false);
@@ -22,7 +22,6 @@ export default function Playlist({ info, onDismiss, getToken, userId }) {
     fetch(`/api/clone/${info.id}`, {
       method: 'POST',
       headers: {
-        Authorization: `${getToken().token_type} ${getToken().access_token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ userId })

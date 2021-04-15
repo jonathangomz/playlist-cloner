@@ -10,7 +10,7 @@ const Message = dynamic(() => import('../components/Message'))
 const Playlist = dynamic(() => import('../components/Playlist'))
 const SearchResult = dynamic(() => import('../components/SearchResult'))
 
-export default function Cloner({ token }) {
+export default function Cloner() {
   const [searchResults, setSearchResults] = useState(undefined);
   const [playlist, setPlaylist] = useState(undefined);
   const [profile, setProfile] = useState(undefined);
@@ -35,7 +35,6 @@ export default function Cloner({ token }) {
         method: 'POST',
         body: JSON.stringify({ search_name: searchText }),
         headers: {
-          Authorization: `${token.token_type} ${token.access_token}`,
           'Content-Type': 'application/json',
         }
       })
@@ -58,11 +57,7 @@ export default function Cloner({ token }) {
     if(searchText) {
       setLoading(true);
 
-      fetch(`/api/playlists/${searchText}`, {
-        headers: {
-          Authorization: `${token.token_type} ${token.access_token}`,
-        }
-      })
+      fetch(`/api/playlists/${searchText}`)
       .then((res) => res.ok ? res.json() : res)
       .then((data) => {
         if(data?.status && data?.status !== 200) {
@@ -77,11 +72,7 @@ export default function Cloner({ token }) {
   };
 
   useEffect(() => {
-    fetch('/api/me', {
-      headers: {
-        Authorization: `${token.token_type} ${token.access_token}`,
-      }
-    })
+    fetch('/api/me')
     .then((res) => res.ok ? res.json() : res)
     .then((data) => {
       if(data?.status && data?.status !== 200) {
@@ -122,7 +113,6 @@ export default function Cloner({ token }) {
             info={playlist}
             userId={profile.id}
             onDismiss={() => setPlaylist(undefined)}
-            getToken={() => token}
           />
         }
 
@@ -156,9 +146,7 @@ export async function getServerSideProps({ req, res }) {
   }
 
   return {
-    props: {
-      token: cookies.token ? JSON.parse(cookies.token) : ''
-    }
+    props: {}
   }
 
 }
