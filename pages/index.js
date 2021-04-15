@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import styles from '../styles/Home.module.css'
 import cookie from 'cookie'
 
@@ -39,13 +38,16 @@ export default function Login() {
   );
 }
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req }) {
   const cookies = cookie.parse(req ? req.headers.cookie || '' : document.cookie);
 
   if (cookies.token) {
-    res.statusCode = 302;
-    res.setHeader('Location', '/cloner');
-    res.end();
+    return {
+      redirect: {
+        destination: '/cloner',
+        permanent: false,
+      }
+    }
   }
 
   return {

@@ -29,5 +29,5 @@ export default async (req, res) => {
     path: '/',
   }));
 
-  res.redirect('/');
+  res.redirect(token ? '/cloner' : '/');
 }

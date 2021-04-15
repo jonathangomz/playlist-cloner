@@ -136,13 +136,16 @@ export default function Cloner() {
   );
 }
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req }) {
   const cookies = cookie.parse(req ? req.headers.cookie || '' : document.cookie);
 
   if (!cookies.token) {
-    res.statusCode = 302;
-    res.setHeader('Location', '/');
-    res.end();
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      }
+    }
   }
 
   return {
