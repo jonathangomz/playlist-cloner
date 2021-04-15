@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import cookie from 'cookie'
+import nookies from 'nookies'
 
 export default function Login() {
   return (
@@ -38,8 +38,8 @@ export default function Login() {
   );
 }
 
-export async function getServerSideProps({ req }) {
-  const cookies = cookie.parse(req ? req.headers.cookie || '' : document.cookie);
+export async function getServerSideProps(ctx) {
+  const cookies = nookies.get(ctx);
 
   if (cookies.token) {
     return {

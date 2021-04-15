@@ -2,7 +2,7 @@ import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import styles from '../styles/Home.module.css'
 import cloner from '../styles/Cloner.module.css'
-import cookie from 'cookie'
+import nookies from 'nookies'
 import { useEffect, useState } from 'react'
 
 const Error = dynamic(() => import('../components/Error'))
@@ -136,8 +136,8 @@ export default function Cloner() {
   );
 }
 
-export async function getServerSideProps({ req }) {
-  const cookies = cookie.parse(req ? req.headers.cookie || '' : document.cookie);
+export async function getServerSideProps(ctx) {
+  const cookies = nookies.get(ctx);
 
   if (!cookies.token) {
     return {
