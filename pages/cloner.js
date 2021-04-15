@@ -104,7 +104,7 @@ export default function Cloner() {
 
         <input className={cloner.search_bar} type="text" placeholder="playlist_id or playlist_name" onChange={(e) => setSearchText(e.target.value)}/>
         <div className={cloner.search_buttons_container}>
-          <button className={cloner.search_button} onClick={search}>Search by name</button>
+          {/* <button className={cloner.search_button} onClick={search}>Search by name</button> */}
           <button className={cloner.search_button} onClick={searchById}>Search by id</button>
         </div>
         
