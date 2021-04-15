@@ -1,10 +1,19 @@
 import axios from 'axios'
+import cookie from 'cookie'
 
 export default async (req, res) => {
+  const cookies = req.headers.cookie;
+  
+  if(!cookies) {
+    return res.redirect('/');
+  }
+
+  const token = JSON.parse(cookie.parse(cookies).token);
+
   // Get the tracks
   const res_tracks = await axios.get(`https://api.spotify.com/v1/playlists/${req.query.playlistId}/tracks`, {
     headers: {
-      Authorization: req.headers.authorization
+      Authorization: `${token.token_type} ${token.access_token}`
     }
   });
 
@@ -17,7 +26,7 @@ export default async (req, res) => {
   // Create the new playlist
   const res_new_playlist = await axios.post(`https://api.spotify.com/v1/users/${req.body.userId}/playlists`, { name: `Copy of ${req.query.playlistId}`}, {
     headers: {
-      Authorization: req.headers.authorization
+      Authorization: `${token.token_type} ${token.access_token}`
     }
   });
 
@@ -28,14 +37,14 @@ export default async (req, res) => {
     uris: tracks_to_be_added,
   }, {
     headers: {
-      Authorization: req.headers.authorization,
+      Authorization: `${token.token_type} ${token.access_token}`,
     }
   });
 
   // Get the last info of the created playlist
   const res_playlist = await axios.get(`https://api.spotify.com/v1/playlists/${id}`, {
     headers: {
-      Authorization: req.headers.authorization
+      Authorization: `${token.token_type} ${token.access_token}`
     }
   });
 
