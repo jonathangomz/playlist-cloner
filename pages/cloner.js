@@ -31,13 +31,7 @@ export default function Cloner() {
     if(searchText) {
       setLoading(true);
 
-      fetch('/api/search', {
-        method: 'POST',
-        body: JSON.stringify({ search_name: searchText }),
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      })
+      fetch(`/api/search/${searchText}`)
       .then((res) => res.ok ? res.json() : res)
       .then((data) => {
         if(data?.status && data?.status !== 200) {
@@ -60,6 +54,7 @@ export default function Cloner() {
       fetch(`/api/playlists/${searchText}`)
       .then((res) => res.ok ? res.json() : res)
       .then((data) => {
+        console.log(data);
         if(data?.status && data?.status !== 200) {
           setError(data);
         }else {
@@ -104,7 +99,7 @@ export default function Cloner() {
 
         <input className={cloner.search_bar} type="text" placeholder="playlist_id or playlist_name" onChange={(e) => setSearchText(e.target.value)}/>
         <div className={cloner.search_buttons_container}>
-          {/* <button className={cloner.search_button} onClick={search}>Search by name</button> */}
+          <button className={cloner.search_button} onClick={search}>Search by name</button>
           <button className={cloner.search_button} onClick={searchById}>Search by id</button>
         </div>
         
@@ -116,7 +111,13 @@ export default function Cloner() {
           />
         }
 
-        {(searchResults && searchResults?.items?.length > 0) && <SearchResult playlists={searchResults.playlists.items}/>}
+        {(searchResults && searchResults?.playlists?.items?.length > 0) &&
+          <SearchResult
+            playlists={searchResults.playlists.items}
+            userId={profile.id}
+            onDismiss={() => setSearchResults(undefined)}
+          />
+        }
 
         {loading && <span>Is loading</span>}
 

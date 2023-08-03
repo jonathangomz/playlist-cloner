@@ -13,10 +13,9 @@ npm install
 
 ### Add the environment variables
 Create the `.env.local` file and add the next variables:
-- `CLIENT`
+- `CLIENT_ID`
 - `CLIENT_SECRET`
 - `CALLBACK`
-- 
 **Note:** To obtain the variables you have to create a new app on the [Spotify developer dashboard](https://developer.spotify.com/).
 
 ### Run:
