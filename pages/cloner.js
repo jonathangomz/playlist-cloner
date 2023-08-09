@@ -126,7 +126,7 @@ export default function Cloner() {
 
       <footer className={styles.footer}>
         <a
-          href="https://jonathangomz.codes"
+          href="https://jonathangomz.github.io"
           target="_blank"
           rel="noopener noreferrer"
         >
